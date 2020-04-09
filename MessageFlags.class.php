@@ -8,20 +8,69 @@
 
 class MessageFlags   {
 	const __default = 0b0000;
-	const Display	= 0b0001;
-	const Text		= 0b0010;
-	const DB			= 0b0100;
-	const Email		= 0b1000;
+	const display	= 0b0001;
+	const text		= 0b0010;
+	const database	= 0b0100;
+	const email		= 0b1000;
 
-	private $display = 0;
-	private $text =0;
-	private $db =0;
-	private $email =0;
-	
-	function getFlags() {
-		return $this->display
-				| $this->text
-				| $this->db
-				| $this->email;
+	private $flagSetting = [
+					'display' => false,
+					'text' => false,
+					'database' => false,
+					'email' => false
+		];
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return array
+	 */
+	public function listOfFlag() : array {
+		$x = [];
+		foreach( $this->flagSetting as $key => $val) {
+			$x[] = $key;
+		}
+		return $x;
 	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @return int
+	 */
+	function getFlagsAsInt() : int {
+		$r = 0;
+		foreach( $this->flagSetting as $key => $val) {
+			if ($val ==1){
+				$r += constant('self::' . $key);
+				echo '(' , $r, ')';
+			}
+		}
+		return $r;
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param type $val
+	 * @return void
+	 */
+	function setIntToFlags( int $passedValue ) : void {
+		foreach( $this->flagSetting as $key=> $val) {
+			$is_set = ((constant('self::' .$key) & $passedValue)   != 0);
+			$this->flagSetting[strtolower($key)] = $is_set;
+		}
+	}
+
+	/** -----------------------------------------------------------------------------------------------
+	 *
+	 * @param string $which
+	 * @return bool
+	 */
+	function setFlag( string $which ) : bool {
+		if (array_key_exists($which, $this->flagSetting)) {
+			$this->flagSetting[$which] =true;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
