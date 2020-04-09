@@ -41,7 +41,6 @@ class MessageFlags   {
 		foreach( $this->flagSetting as $key => $val) {
 			if ($val ==1){
 				$r += constant('self::' . $key);
-				echo '(' , $r, ')';
 			}
 		}
 		return $r;
